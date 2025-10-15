@@ -40,7 +40,7 @@ export const ProductSchema = new Schema(
             },
         ],
         rating: { type: Number, default: 0 },
-        variation: {
+        variations: {
             type: [
                 {
                     type: Schema.Types.ObjectId,

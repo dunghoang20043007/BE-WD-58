@@ -45,7 +45,7 @@ productVariationSchema.post("save", async function (doc) {
     await mongoose.model(PRODUCT_VARIATION_DOCUMENT_NAME).findByIdAndUpdate(
         doc.productId,
         {
-            $push: { variationIds: doc._id },
+            $push: { variations: doc._id },
             priceFilter: doc.price,
         },
         { new: true },
