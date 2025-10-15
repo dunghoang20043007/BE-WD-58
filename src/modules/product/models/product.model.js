@@ -22,11 +22,7 @@ export const ProductSchema = new Schema(
                 type: String,
             },
         ],
-        imageUrlRefs: [],
         thumbnail: {
-            type: String,
-        },
-        thumbnailUrlRef: {
             type: String,
         },
         isHide: {
@@ -40,16 +36,6 @@ export const ProductSchema = new Schema(
             },
         ],
         rating: { type: Number, default: 0 },
-        variations: {
-            type: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: PRODUCT_VARIATION_DOCUMENT_NAME,
-                },
-            ],
-            default: [],
-        },
-
         brand: {
             type: Schema.Types.ObjectId,
             ref: BRAND_DOCUMENT_NAME,
