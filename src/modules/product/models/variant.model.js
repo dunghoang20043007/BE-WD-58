@@ -32,9 +32,9 @@ const productVariationSchema = new mongoose.Schema(
             },
         ],
         // @ref
-        product: {
+        productId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: PRODUCT_VARIATION_DOCUMENT_NAME,
+            ref: "Product",
             required: true,
         },
     },

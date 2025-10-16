@@ -7,6 +7,7 @@
     "scripts": {
         "dev": "concurrently \"nodemon index.js\" \"npm run swagger\"",
         "swagger": "node src/swagger/swaggerSetup.js",
+        "seed": "node src/mocks/index.js",
         "prepare": "husky"
     },
     "lint-staged": {
@@ -23,6 +24,7 @@
         "express": "^4.21.2",
         "expressjs": "^1.0.1",
         "fs": "^0.0.1-security",
+        "http-status-codes": "^2.3.0",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.10.0",
         "morgan": "^1.10.1",
@@ -37,6 +39,7 @@
     "devDependencies": {
         "@commitlint/cli": "^19.8.1",
         "@commitlint/config-conventional": "^19.8.1",
+        "@faker-js/faker": "^10.1.0",
         "@types/bcrypt": "^5.0.2",
         "@types/express": "^5.0.0",
         "@types/jsonwebtoken": "^9.0.9",
