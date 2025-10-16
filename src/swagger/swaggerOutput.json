@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": ""
   },
-  "host": "localhost:3000",
+  "host": "127.0.0.1:8000",
   "basePath": "/api",
   "schemes": [
     "http",
@@ -66,6 +66,26 @@
             "type": "string"
           }
         ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "",
         "responses": {
           "default": {
             "description": ""
