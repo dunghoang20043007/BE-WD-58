@@ -77,7 +77,7 @@ const createProducts = async (brands, count = 50) => {
             status: faker.helpers.arrayElement([PRODUCT_STATUS.NEW, PRODUCT_STATUS.USED]),
             isAvailable: faker.helpers.maybe(() => true, { probability: 0.9 }) || false,
             isDeleted: false,
-            isHide: faker.helpers.maybe(() => false, { probability: 0.95 }) || true,
+            isHide: faker.helpers.maybe(() => true, { probability: 0.1 }) || false,
             attributes: [
                 {
                     key: "color",
@@ -117,12 +117,16 @@ const createProductVariations = async (products, count = 50) => {
             const color = faker.color.human();
             const variantImage = faker.helpers.arrayElement(productImages);
 
+            // Đảm bảo sold <= quantity
+            const sold = faker.number.int({ min: 0, max: 300 });
+            const quantity = faker.number.int({ min: sold, max: 500 });
+
             variations.push({
                 price: faker.number.int({ min: 1000000, max: 50000000 }),
                 image: variantImage,
                 imageUrlRef: variantImage,
-                stock: faker.number.int({ min: 0, max: 500 }),
-                sold: faker.number.int({ min: 0, max: 300 }),
+                quantity,
+                sold,
                 sku: `${product.parentSku}-${storage}-${faker.string.alphanumeric(3).toUpperCase()}`,
                 isActive: faker.helpers.maybe(() => true, { probability: 0.9 }) || false,
                 variantAttributes: [

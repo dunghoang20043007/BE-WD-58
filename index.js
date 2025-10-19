@@ -13,7 +13,13 @@ checkVersion();
 const app = express();
 app.use(express.json());
 
-app.use(cors());
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+    }),
+);
 setupSwagger(app);
 if (NODE_ENV === "development") {
     console.log("Morgan Dev Running");

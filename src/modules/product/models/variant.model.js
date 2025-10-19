@@ -11,7 +11,7 @@ const productVariationSchema = new mongoose.Schema(
         },
         image: { type: String },
         imageUrlRef: String,
-        stock: {
+        quantity: {
             type: Number,
         },
         sold: {

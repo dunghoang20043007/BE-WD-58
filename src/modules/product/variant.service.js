@@ -60,48 +60,48 @@ export const getVariantsByProduct = async (productId) => {
 };
 
 /**
- * Cập nhật stock của variant
+ * Cập nhật quantity của variant
  * @param {String} variantId - ID variant
- * @param {Number} newStock - Stock mới
+ * @param {Number} newquantity - quantity mới
  * @returns {Object} Variant đã cập nhật
  */
-export const updateVariantStock = async (variantId, newStock) => {
-    return await ProductVariation.findByIdAndUpdate(variantId, { stock: newStock }, { new: true });
+export const updateVariantquantity = async (variantId, newquantity) => {
+    return await ProductVariation.findByIdAndUpdate(variantId, { quantity: newquantity }, { new: true });
 };
 
 /**
- * Tăng stock (khi rollback)
+ * Tăng quantity (khi rollback)
  * @param {String} variantId - ID variant
  * @param {Number} quantity - Số lượng tăng
  * @returns {Object} Variant đã cập nhật
  */
-export const increaseVariantStock = async (variantId, quantity) => {
-    return await ProductVariation.findByIdAndUpdate(variantId, { $inc: { stock: quantity } }, { new: true });
+export const increaseVariantquantity = async (variantId, quantity) => {
+    return await ProductVariation.findByIdAndUpdate(variantId, { $inc: { quantity: quantity } }, { new: true });
 };
 
 /**
- * Giảm stock (khi bán)
+ * Giảm quantity (khi bán)
  * @param {String} variantId - ID variant
  * @param {Number} quantity - Số lượng giảm
  * @returns {Object} Variant đã cập nhật
  */
-export const decreaseVariantStock = async (variantId, quantity) => {
+export const decreaseVariantquantity = async (variantId, quantity) => {
     return await ProductVariation.findByIdAndUpdate(
         variantId,
-        { $inc: { stock: -quantity, sold: quantity } },
+        { $inc: { quantity: -quantity, sold: quantity } },
         { new: true },
     );
 };
 
 /**
- * Kiểm tra stock đủ cho variant
+ * Kiểm tra quantity đủ cho variant
  * @param {String} variantId - ID variant
  * @param {Number} quantity - Số lượng cần kiểm tra
- * @returns {Boolean} True nếu đủ stock
+ * @returns {Boolean} True nếu đủ quantity
  */
-export const checkVariantStock = async (variantId, quantity) => {
+export const checkVariantquantity = async (variantId, quantity) => {
     const variant = await ProductVariation.findById(variantId);
-    return variant && variant.stock >= quantity;
+    return variant && variant.quantity >= quantity;
 };
 
 /**
@@ -151,13 +151,13 @@ export const getVariantList = async (query = {}) => {
 };
 
 /**
- * Lấy variants có stock thấp
- * @param {Number} threshold - Ngưỡng stock
+ * Lấy variants có quantity thấp
+ * @param {Number} threshold - Ngưỡng quantity
  * @returns {Array} Danh sách variants
  */
-export const getLowStockVariants = async (threshold = 10) => {
+export const getLowquantityVariants = async (threshold = 10) => {
     return await ProductVariation.find({
-        stock: { $lte: threshold },
+        quantity: { $lte: threshold },
         isActive: true,
     });
     // .populate("product"); // bỏ vì không còn relationship trực tiếp
