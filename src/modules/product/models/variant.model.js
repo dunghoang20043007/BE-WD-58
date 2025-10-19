@@ -31,26 +31,20 @@ const productVariationSchema = new mongoose.Schema(
                 _id: false,
             },
         ],
-        // @ref
-        productId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
-            required: true,
-        },
     },
     { timestamps: true, versionKey: false, collection: PRODUCT_VARIATION_COLLECTION_NAME },
 );
 
-productVariationSchema.post("save", async function (doc) {
-    await mongoose.model(PRODUCT_VARIATION_DOCUMENT_NAME).findByIdAndUpdate(
-        doc.productId,
-        {
-            $push: { variations: doc._id },
-            priceFilter: doc.price,
-        },
-        { new: true },
-    );
-});
+// productVariationSchema.post("save", async function (doc) {
+//     await mongoose.model(PRODUCT_VARIATION_DOCUMENT_NAME).findByIdAndUpdate(
+//         doc.productId,
+//         {
+//             $push: { variations: doc._id },
+//             priceFilter: doc.price,
+//         },
+//         { new: true },
+//     );
+// });
 
 const ProductVariation = mongoose.model(PRODUCT_VARIATION_DOCUMENT_NAME, productVariationSchema);
 

@@ -92,7 +92,7 @@ const createProducts = async (brands, count = 50) => {
             ],
             rating: faker.number.float({ min: 0, max: 5, fractionDigits: 1 }),
             reviewCount: faker.number.int({ min: 0, max: 1000 }),
-            variationIds: [],
+            // variationIds: [], // bỏ vì sẽ được set sau khi tạo variations
             brandId: brand._id,
             priceFilter: faker.number.int({ min: 100000, max: 50000000 }),
             attributeVariantForFilter: [],
@@ -108,7 +108,8 @@ const createProductVariations = async (products, count = 50) => {
     console.log(`Creating ${count} product variations...`);
     const variations = [];
 
-    for (const product of products.slice(0, Math.min(products.length, 15))) {
+    // Tạo variations cho tất cả products
+    for (const product of products) {
         const variationCount = faker.number.int({ min: 2, max: 5 });
 
         for (let i = 0; i < variationCount; i++) {
@@ -136,7 +137,7 @@ const createProductVariations = async (products, count = 50) => {
                         value: color,
                     },
                 ],
-                productId: product._id,
+                // productId: product._id, // bỏ vì model đã thay đổi
             });
         }
     }
@@ -144,22 +145,22 @@ const createProductVariations = async (products, count = 50) => {
     const createdVariations = await ProductVariation.insertMany(variations);
     console.log(`Created ${createdVariations.length} product variations`);
 
-    const variationsByProduct = createdVariations.reduce((acc, variation) => {
-        if (!acc[variation.productId]) {
-            acc[variation.productId] = [];
-        }
-        acc[variation.productId].push(variation._id);
-        return acc;
-    }, {});
+    // Liên kết variations với products tương ứng
+    let variationIndex = 0;
+    for (const product of products) {
+        const variationCount = faker.number.int({ min: 2, max: 5 });
+        const productVariations = createdVariations.slice(variationIndex, variationIndex + variationCount);
+        const variationIds = productVariations.map((v) => v._id);
 
-    for (const [productId, variationIds] of Object.entries(variationsByProduct)) {
-        await Product.findByIdAndUpdate(productId, {
+        await Product.findByIdAndUpdate(product._id, {
             variationIds,
-            priceFilter: createdVariations.find((v) => v.productId.toString() === productId).price,
+            priceFilter: productVariations[0]?.price || product.priceFilter,
         });
+
+        variationIndex += variationCount;
     }
 
-    console.log("Updated products with variation IDs");
+    console.log("Updated all products with variation IDs");
     return createdVariations;
 };
 
@@ -175,7 +176,7 @@ const seedDatabase = async () => {
         console.log("\n✅ Database seeded successfully!");
         console.log(`   - Brands: ${brands.length}`);
         console.log(`   - Products: ${products.length}`);
-        console.log(`   - Variations: Created for first 15 products`);
+        console.log(`   - Variations: Created for all products`);
 
         process.exit(0);
     } catch (error) {

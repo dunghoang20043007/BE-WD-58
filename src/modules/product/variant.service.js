@@ -30,10 +30,8 @@ export const updateVariant = async (variantId, updateData) => {
 export const deleteVariant = async (variantId) => {
     const variant = await ProductVariation.findByIdAndDelete(variantId);
     if (variant) {
-        // Remove from product's variations array
-        await Product.findByIdAndUpdate(variant.product, {
-            $pull: { variations: variantId },
-        });
+        // Cập nhật product để remove variation ID (logic này cần được xử lý ở controller/service level)
+        // Vì variant không còn reference trực tiếp đến product
     }
     return variant;
 };
@@ -44,7 +42,8 @@ export const deleteVariant = async (variantId) => {
  * @returns {Object} Variant
  */
 export const getVariantById = async (variantId) => {
-    return await ProductVariation.findById(variantId).populate("product");
+    return await ProductVariation.findById(variantId);
+    // .populate("product"); // bỏ vì không còn relationship trực tiếp
 };
 
 /**
@@ -53,7 +52,11 @@ export const getVariantById = async (variantId) => {
  * @returns {Array} Danh sách variants
  */
 export const getVariantsByProduct = async (productId) => {
-    return await ProductVariation.find({ product: productId, isActive: true });
+    // Vì variant không còn reference trực tiếp đến product
+    // Cần lấy từ product.variationIds hoặc tìm cách khác
+    const product = await Product.findById(productId);
+    if (!product || !product.variationIds) return [];
+    return await ProductVariation.find({ _id: { $in: product.variationIds }, isActive: true });
 };
 
 /**
@@ -129,7 +132,7 @@ export const getVariantList = async (query = {}) => {
     const skip = (page - 1) * limit;
 
     const variants = await ProductVariation.find(filters)
-        .populate("product")
+        // .populate("product") // bỏ vì không còn relationship trực tiếp
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
@@ -156,7 +159,8 @@ export const getLowStockVariants = async (threshold = 10) => {
     return await ProductVariation.find({
         stock: { $lte: threshold },
         isActive: true,
-    }).populate("product");
+    });
+    // .populate("product"); // bỏ vì không còn relationship trực tiếp
 };
 
 /**
