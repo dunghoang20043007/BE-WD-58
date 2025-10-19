@@ -23,10 +23,15 @@ const getDetailedProduct = asyncHandler(async (req, res, next) => {
 
     return successResponse(res, product);
 });
+// @Get: getAllProductAdmin
+const getAllProductAdmin = asyncHandler(async (req, res, next) => {
+    return await productService.getAllProductAdmin(req, res, next);
+});
 
 export const productController = {
     getAllProducts,
     getTop10ProductSold,
     getTopLatestProducts,
     getDetailedProduct,
+    getAllProductAdmin,
 };

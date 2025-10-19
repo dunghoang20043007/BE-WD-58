@@ -11,8 +11,8 @@ export const customResponse = (res, statusCode, message, data = null, meta = nul
     return res.status(statusCode).json(response);
 };
 
-export const successResponse = (res, data) => {
-    return customResponse(res, res, StatusCodes.OK, ReasonPhrases.OK, data);
+export const successResponse = (res, data, meta) => {
+    return customResponse(res, StatusCodes.OK, ReasonPhrases.OK, data, meta);
 };
 
 export default customResponse;
