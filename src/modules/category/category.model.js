@@ -11,11 +11,6 @@ var categorySchema = new mongoose.Schema(
             trim: true,
             unique: true,
         },
-        attribute: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-            },
-        ],
     },
     {
         collection: CATEGORY_COLLECTION_NAME,
