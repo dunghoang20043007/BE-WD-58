@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { PRODUCT_VARIATION_DOCUMENT_NAME } from "./variant.model.js";
 import { BRAND_DOCUMENT_NAME } from "../../brand/brand.model.js";
-import { CATEGORY_DOCUMENT_NAME } from "../../category/category.model.js";
 import { PRODUCT_STATUS } from "../../../common/constants/productStatus.js";
 
 export const PRODUCT_COLLECTION_NAME = "Products";
@@ -80,10 +79,6 @@ export const ProductSchema = new Schema(
         brandId: {
             type: Schema.Types.ObjectId,
             ref: "Brand",
-        },
-        categoryId: {
-            type: Schema.Types.ObjectId,
-            ref: "Category",
         },
         priceFilter: Number,
         attributeVariantForFilter: [

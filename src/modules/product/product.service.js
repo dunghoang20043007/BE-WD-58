@@ -125,7 +125,6 @@ const queryClientFields = {
     reviewCount: 1,
     attributes: 1,
     discountPercentage: 1,
-    categoryId: 1,
     brandId: 1,
     variationIds: 1,
     priceFilter: 1,

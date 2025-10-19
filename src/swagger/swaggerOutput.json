@@ -77,8 +77,11 @@
       "post": {
         "description": "",
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -87,8 +90,11 @@
       "post": {
         "description": "",
         "responses": {
-          "default": {
-            "description": ""
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

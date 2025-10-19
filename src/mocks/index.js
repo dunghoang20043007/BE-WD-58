@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
 import Brand from "../modules/brand/brand.model.js";
-import Category from "../modules/category/category.model.js";
 import Product from "../modules/product/models/product.model.js";
 import ProductVariation from "../modules/product/models/variant.model.js";
 import { PRODUCT_STATUS } from "../common/constants/productStatus.js";
@@ -21,12 +20,7 @@ const connectDB = async () => {
 
 const clearData = async () => {
     console.log("Clearing old data...");
-    await Promise.all([
-        Brand.deleteMany({}),
-        Category.deleteMany({}),
-        Product.deleteMany({}),
-        ProductVariation.deleteMany({}),
-    ]);
+    await Promise.all([Brand.deleteMany({}), Product.deleteMany({}), ProductVariation.deleteMany({})]);
     console.log("Old data cleared");
 };
 
@@ -51,42 +45,6 @@ const createBrands = async (count = 50) => {
     return createdBrands;
 };
 
-const createCategories = async (count = 50) => {
-    console.log(`Creating ${count} categories...`);
-    const categories = [];
-    const categoryNames = new Set();
-
-    const categoryList = [
-        "Điện thoại",
-        "Laptop",
-        "Máy tính bảng",
-        "Đồng hồ thông minh",
-        "Tai nghe",
-        "Loa",
-        "Bàn phím",
-        "Chuột",
-        "Màn hình",
-        "PC Gaming",
-    ];
-
-    while (categoryNames.size < count) {
-        const baseName = faker.helpers.arrayElement(categoryList);
-        const suffix = faker.helpers.maybe(() => ` ${faker.commerce.productAdjective()}`, { probability: 0.5 });
-        categoryNames.add(`${baseName}${suffix || ""}`);
-    }
-
-    for (const name of categoryNames) {
-        categories.push({
-            name,
-            attribute: [],
-        });
-    }
-
-    const createdCategories = await Category.insertMany(categories);
-    console.log(`Created ${createdCategories.length} categories`);
-    return createdCategories;
-};
-
 const productImages = [
     "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-plus_2.png",
     "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/op-lung-samsung-galaxy-s24-kem-day-6_1.png",
@@ -98,13 +56,12 @@ const productImages = [
     "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno12-5g_2.png",
 ];
 
-const createProducts = async (brands, categories, count = 50) => {
+const createProducts = async (brands, count = 50) => {
     console.log(`Creating ${count} products...`);
     const products = [];
 
     for (let i = 0; i < count; i++) {
         const brand = faker.helpers.arrayElement(brands);
-        const category = faker.helpers.arrayElement(categories);
         const imageCount = faker.number.int({ min: 1, max: 4 });
         const images = Array.from({ length: imageCount }, () => faker.helpers.arrayElement(productImages));
 
@@ -137,7 +94,6 @@ const createProducts = async (brands, categories, count = 50) => {
             reviewCount: faker.number.int({ min: 0, max: 1000 }),
             variationIds: [],
             brandId: brand._id,
-            categoryId: category._id,
             priceFilter: faker.number.int({ min: 100000, max: 50000000 }),
             attributeVariantForFilter: [],
         });
@@ -213,13 +169,11 @@ const seedDatabase = async () => {
         await clearData();
 
         const brands = await createBrands(50);
-        const categories = await createCategories(50);
-        const products = await createProducts(brands, categories, 50);
+        const products = await createProducts(brands, 50);
         await createProductVariations(products, 50);
 
         console.log("\n✅ Database seeded successfully!");
         console.log(`   - Brands: ${brands.length}`);
-        console.log(`   - Categories: ${categories.length}`);
         console.log(`   - Products: ${products.length}`);
         console.log(`   - Variations: Created for first 15 products`);
 
